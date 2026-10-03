@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Savings and current accounts', 'Open a savings or current account, then deposit, withdraw, transfer and read your statement online.', 'index,follow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap">
+    <h1>Open a savings or current account and manage it online</h1>
+    <p class="lede">Apply with one form. Your 16-digit card number and 4-digit PIN are issued as soon as you submit it. After that you can deposit, withdraw, transfer to other accounts and read your statement.</p>
+    <div class="actions">
+      <a class="btn" th:href="@{/apply}" href="/apply">Open an account</a>
+      <a class="btn btn-secondary" th:href="@{/login}" href="/login">Sign in</a>
+    </div>
+
+    <p class="info spaced" th:if="${site.demoMode()}">This is a demonstration project. Balances are not real money and no real money is held or moved. Use test values instead of your own PAN and Aadhaar numbers.</p>
+
+    <h2>What you can do</h2>
+    <div class="features">
+      <div>
+        <h3>Deposit</h3>
+        <p>Add money to your account. Every deposit appears in your statement with the balance after it.</p>
+      </div>
+      <div>
+        <h3>Withdraw</h3>
+        <p>Take money out after confirming with your PIN. A withdrawal is refused if the balance does not cover it.</p>
+      </div>
+      <div>
+        <h3>Transfer</h3>
+        <p>Send money to another account using its card number. Both statements are updated together or not at all.</p>
+      </div>
+      <div>
+        <h3>Statement</h3>
+        <p>Every transaction in date order with the running balance. Print it straight from your browser.</p>
+      </div>
+    </div>
+
+    <h2>Before you apply</h2>
+    <ul class="prose">
+      <li>You must be 18 or older.</li>
+      <li>Have your PAN and Aadhaar number ready. Your PAN is stored encrypted and only the last four digits of your Aadhaar number are kept.</li>
+      <li>Each deposit, withdrawal or transfer is limited to <span th:text="${maxTransaction}">limit</span>.</li>
+      <li>Read how your details are handled in the <a th:href="@{/privacy}" href="/privacy">privacy policy</a>.</li>
+    </ul>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Terms and conditions', 'The rules for opening and using an account on this service.', 'index,follow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap prose legal">
+    <h1>Terms and conditions</h1>
+    <p class="updated">Last updated: 3 October 2026</p>
+
+    <p>These terms apply when you open or use an account on this service, which is run by <span th:text="${site.operatorName()}">Operator</span>. By submitting the application form you agree to them.</p>
+
+    <h2 th:if="${site.demoMode()}">Nature of the service</h2>
+    <p th:if="${site.demoMode()}">This is a demonstration project. Balances, deposits, withdrawals and transfers are simulated. No real money is held, received, paid out or moved, and nothing here is a banking service regulated by the Reserve Bank of India. Please use test values instead of your own PAN and Aadhaar numbers.</p>
+
+    <h2>Who can open an account</h2>
+    <p>You must be at least 18 years old and able to enter a legal contract. You must give accurate details. Each application creates one savings or current account.</p>
+
+    <h2>Your card number and PIN</h2>
+    <p>When your application is accepted you receive a 16-digit card number and a 4-digit PIN. You sign in with both. You are responsible for keeping them private and for anything done with them. Tell us straight away if you think someone else knows your PIN, and change it from the account menu.</p>
+    <p>After <span th:text="${maxAttempts}">5</span> wrong PIN attempts in a row the account is locked for <span th:text="${lockMinutes}">15</span> minutes. The PIN is also required for withdrawals, transfers and PIN changes, and wrong attempts there count towards the same limit.</p>
+
+    <h2>Deposits, withdrawals and transfers</h2>
+    <ul>
+      <li>Each deposit, withdrawal or transfer is limited to <span th:text="${maxTransaction}">limit</span>.</li>
+      <li>A withdrawal or transfer is refused if the balance is lower than the amount.</li>
+      <li>A transfer is made to the account that has the card number you enter. Once confirmed it cannot be reversed by you, so check the number before you submit.</li>
+      <li>Every transaction appears in your statement. If you see one you do not recognise, write to us at once.</li>
+      <li>If we find that an entry was made by mistake we may correct it and will show the correction in your statement.</li>
+    </ul>
+
+    <h2>Acceptable use</h2>
+    <p>Do not use the service for anything unlawful, do not try to get into another person's account, and do not probe, overload or bypass the security of the service. Automated access is not allowed.</p>
+
+    <h2>Availability</h2>
+    <p>We try to keep the service running but do not promise that it will always be available or free of errors. We may suspend it for maintenance.</p>
+
+    <h2>Our responsibility</h2>
+    <p>To the extent the law allows, we are not responsible for losses that come from you sharing your PIN, from entering the wrong recipient, from the service being unavailable, or from events outside our control. Nothing in these terms limits any right you have under law that cannot be limited by agreement.</p>
+
+    <h2>Closing an account</h2>
+    <p>You can ask us to close your account by writing to us. We may suspend or close an account that is used in breach of these terms.</p>
+
+    <h2>Your personal data</h2>
+    <p>How we handle your personal data is described in the <a th:href="@{/privacy}" href="/privacy">privacy policy</a>.</p>
+
+    <h2>Changes</h2>
+    <p>We may change these terms. The date at the top of this page shows when they last changed. If you keep using the service after a change you accept the new terms.</p>
+
+    <h2>Law and contact</h2>
+    <p>These terms are governed by the laws of India, and the courts at <span th:text="${site.jurisdiction()}">place</span> have jurisdiction. Write to us at <a th:href="'mailto:' + ${site.contactEmail()}" th:text="${site.contactEmail()}" href="#">email</a>.</p>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

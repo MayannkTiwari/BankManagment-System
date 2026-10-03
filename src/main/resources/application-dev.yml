@@ -1,0 +1,10 @@
+# Local development only. Session cookies are not marked Secure because localhost runs over plain http.
+server:
+  servlet:
+    session:
+      cookie:
+        secure: false
+
+spring:
+  thymeleaf:
+    cache: false

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Account', 'Your balance and recent transactions.', 'noindex,nofollow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap">
+    <div class="notice" role="status" th:if="${notice != null}" th:text="${notice}">Notice</div>
+
+    <section class="balance-panel" aria-labelledby="balance-heading">
+      <p class="balance-label" id="balance-heading" th:text="${account.accountType()}">Savings account</p>
+      <p class="balance" th:text="${account.balance()}">0.00</p>
+      <p class="mono" th:text="${account.cardNumber()}">9000 0000 0000 0000</p>
+    </section>
+
+    <h2>Recent transactions</h2>
+    <div class="table-scroll" th:if="${!entries.isEmpty()}">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Description</th><th class="num">Withdrawn</th><th class="num">Deposited</th><th class="num">Balance</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="entry : ${entries}">
+            <td th:text="${entry.when()}">date</td>
+            <td th:text="${entry.description()}">description</td>
+            <td class="num" th:text="${entry.withdrawn()}"></td>
+            <td class="num" th:text="${entry.deposited()}"></td>
+            <td class="num" th:text="${entry.balance()}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="empty" th:if="${entries.isEmpty()}">No transactions yet. Use Deposit to add money to this account.</p>
+    <p><a th:href="@{/account/statement}" href="/account/statement">View full statement</a></p>
+
+    <h2>Details on file</h2>
+    <dl class="details">
+      <dt>Account holder</dt><dd th:text="${account.holderName()}">Name</dd>
+      <dt>Opened on</dt><dd th:text="${account.openedOn()}">date</dd>
+      <dt>Email</dt><dd th:text="${account.email()}">email</dd>
+      <dt>Address</dt><dd th:text="${account.address()}">address</dd>
+      <dt>PAN</dt><dd th:text="${account.panMasked()}">XXXXXX0000</dd>
+      <dt>Aadhaar</dt><dd th:text="${account.aadhaarMasked()}">XXXX XXXX 0000</dd>
+    </dl>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

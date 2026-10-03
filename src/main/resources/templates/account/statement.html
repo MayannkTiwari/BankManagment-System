@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Statement', 'Every transaction on your account with the running balance.', 'noindex,nofollow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap">
+    <h1>Statement</h1>
+    <p th:text="${account.accountType()} + ', card ending ' + ${#strings.substring(account.cardNumber(), account.cardNumber().length() - 4)}">Account</p>
+    <p>Current balance: <strong th:text="${account.balance()}">0.00</strong></p>
+
+    <div class="table-scroll" th:if="${!statement.entries().isEmpty()}">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Description</th><th class="num">Withdrawn</th><th class="num">Deposited</th><th class="num">Balance</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="entry : ${statement.entries()}">
+            <td th:text="${entry.when()}">date</td>
+            <td th:text="${entry.description()}">description</td>
+            <td class="num" th:text="${entry.withdrawn()}"></td>
+            <td class="num" th:text="${entry.deposited()}"></td>
+            <td class="num" th:text="${entry.balance()}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="empty" th:if="${statement.entries().isEmpty()}">No transactions to show.</p>
+
+    <nav class="pager" aria-label="Statement pages" th:if="${statement.totalPages() > 1}">
+      <a th:if="${statement.hasPrevious()}" th:href="@{/account/statement(page=${statement.page() - 1})}" href="#">Newer</a>
+      <span th:unless="${statement.hasPrevious()}"></span>
+      <span th:text="'Page ' + ${statement.page() + 1} + ' of ' + ${statement.totalPages()}">Page 1 of 1</span>
+      <a th:if="${statement.hasNext()}" th:href="@{/account/statement(page=${statement.page() + 1})}" href="#">Older</a>
+      <span th:unless="${statement.hasNext()}"></span>
+    </nav>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

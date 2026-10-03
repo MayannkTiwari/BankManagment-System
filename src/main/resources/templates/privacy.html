@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Privacy policy', 'What personal data this service collects, why, how it is protected and how to contact us about it.', 'index,follow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap prose legal">
+    <h1>Privacy policy</h1>
+    <p class="updated">Last updated: 3 October 2026</p>
+
+    <p th:if="${site.demoMode()}">This service is a demonstration project. Please do not enter your real PAN or Aadhaar number. Test values are accepted. The rest of this policy describes how data is handled for whatever you do enter.</p>
+
+    <h2>Who is responsible for your data</h2>
+    <p><span th:text="${site.operatorName()}">Operator</span> runs this service and decides how your personal data is used. You can write to us at <a th:href="'mailto:' + ${site.contactEmail()}" th:text="${site.contactEmail()}" href="#">email</a>.</p>
+
+    <h2>What we collect</h2>
+    <p>When you apply for an account we collect: your full name, father's name, date of birth, gender, marital status, email address, postal address, city and PIN code, occupation, annual income range, PAN, and Aadhaar number. We do not ask for religion, caste or category.</p>
+    <p>While you use the account we record your card number, a hash of your PIN, your balance, the number of recent wrong PIN attempts, and every deposit, withdrawal and transfer with its date, amount and resulting balance. For transfers, each side of the transfer records the other account's card number.</p>
+    <p>Our hosting provider and the servers that run this service may keep technical logs such as IP address, date and time, and the page requested, as part of normal operation and security.</p>
+
+    <h2>Why we use it</h2>
+    <ul>
+      <li>To open your account and identify you when you sign in.</li>
+      <li>To carry out deposits, withdrawals and transfers and to show your balance and statement.</li>
+      <li>To protect accounts, for example by locking an account after repeated wrong PIN attempts.</li>
+      <li>To meet legal obligations that apply to us.</li>
+    </ul>
+    <p>We do not use your data for advertising, profiling or marketing, and we do not send marketing messages.</p>
+
+    <h2>How your data is protected</h2>
+    <ul>
+      <li>Your PIN is never stored as typed. It is stored only as a salted hash that also depends on a secret kept outside the database.</li>
+      <li>Your PAN is stored encrypted. Of your Aadhaar number we keep only the last four digits and discard the rest at the moment you submit the form.</li>
+      <li>Pages are served over an encrypted connection, and the session cookie cannot be read by scripts on the page.</li>
+      <li>You are signed out automatically after a period of inactivity.</li>
+    </ul>
+    <p>No system can be made completely secure, so we cannot promise that unauthorised access will never happen.</p>
+
+    <h2>Cookies</h2>
+    <p>We use one cookie, a session cookie, which keeps you signed in and protects forms from forgery. It is strictly necessary for the service to work. We do not use analytics, advertising or tracking cookies, and this site loads no scripts, fonts or images from other websites.</p>
+
+    <h2>Who we share it with</h2>
+    <p>We do not sell your data. It is processed on our behalf by the companies that host the application and its database. We may disclose data where a law, court or authority requires us to.</p>
+
+    <h2>How long we keep it</h2>
+    <p>We keep account and transaction records while the account exists, and afterwards for as long as the law requires or as needed to settle a dispute. After that they are deleted.</p>
+
+    <h2>Your rights</h2>
+    <p>Under the Digital Personal Data Protection Act, 2023 you can ask us for a summary of the personal data we hold about you, ask us to correct inaccurate data, ask us to erase data we no longer need to keep, and nominate another person to exercise these rights on your behalf if you die or become unable to. Email us at <a th:href="'mailto:' + ${site.contactEmail()}" th:text="${site.contactEmail()}" href="#">email</a> with the request and the card number of the account. If you are not satisfied with our answer you can complain to the Data Protection Board of India.</p>
+
+    <h2>Children</h2>
+    <p>This service is for people aged 18 and over. The application form rejects a date of birth that makes the applicant younger than 18.</p>
+
+    <h2>Changes to this policy</h2>
+    <p>If we change this policy we will update the date at the top of this page.</p>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

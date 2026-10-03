@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Account opened', 'Your card number and PIN.', 'noindex,nofollow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap narrow">
+    <h1>Your account is open</h1>
+    <p th:text="'Account type: ' + ${openedType}">Account type</p>
+    <div class="credentials">
+      <dl>
+        <dt>Card number</dt>
+        <dd th:text="${openedCardNumber}">9000 0000 0000 0000</dd>
+        <dt>PIN</dt>
+        <dd th:text="${openedPin}">0000</dd>
+      </dl>
+    </div>
+    <p><strong>Write these down now.</strong> The PIN is stored only as a hash and cannot be shown again. You can change it after you sign in. You sign in with the card number and the PIN.</p>
+    <div class="actions">
+      <a class="btn" th:href="@{/login}" href="/login">Sign in</a>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

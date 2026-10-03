@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Sign in', 'Sign in with your card number and PIN.', 'noindex,follow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap narrow">
+    <h1>Sign in</h1>
+    <div class="alert" role="alert" th:if="${param.error != null}">
+      <p>The card number or PIN is incorrect, or the account is temporarily locked.</p>
+    </div>
+    <div class="notice" role="status" th:if="${param.signedOut != null}">
+      <p>You have been signed out.</p>
+    </div>
+    <form class="form" th:action="@{/login}" action="/login" method="post">
+      <div class="field">
+        <label for="cardNumber">Card number</label>
+        <input type="text" id="cardNumber" name="cardNumber" inputmode="numeric" maxlength="23" autocomplete="username" required>
+        <p class="hint">The 16 digits issued when you opened the account.</p>
+      </div>
+      <div class="field">
+        <label for="pin">PIN</label>
+        <input type="password" id="pin" name="pin" inputmode="numeric" maxlength="4" autocomplete="current-password" required>
+      </div>
+      <button class="btn" type="submit">Sign in</button>
+    </form>
+    <p>No account yet? <a th:href="@{/apply}" href="/apply">Open one</a>.</p>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

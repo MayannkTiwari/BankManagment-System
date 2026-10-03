@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Something went wrong', 'An error occurred while handling the request.', 'noindex,nofollow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap narrow">
+    <h1>Something went wrong</h1>
+    <p>The request could not be completed. Nothing has been changed by a failed request. Try again in a moment.</p>
+    <p><a class="btn" th:href="@{/}" href="/">Go to the home page</a></p>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: bank-management-system
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  web:
+    resources:
+      chain:
+        strategy:
+          content:
+            enabled: true
+            paths: /**
+      cache:
+        cachecontrol:
+          max-age: 1h
+          cache-public: true
+
+server:
+  shutdown: graceful
+  servlet:
+    session:
+      timeout: 15m
+      cookie:
+        http-only: true
+        secure: true
+        same-site: lax
+  error:
+    include-stacktrace: never
+    include-message: never
+    include-binding-errors: never
+    whitelabel:
+      enabled: false
+
+app:
+  brand-name: ${APP_BRAND_NAME:Bank Management System}
+  operator-name: ${APP_OPERATOR_NAME}
+  contact-email: ${APP_CONTACT_EMAIL}
+  jurisdiction: ${APP_JURISDICTION}
+  public-url: ${APP_PUBLIC_URL}
+  demo-mode: ${APP_DEMO_MODE:true}
+  timezone: Asia/Kolkata
+  security:
+    data-key: ${APP_DATA_KEY}
+    pin-pepper: ${APP_PIN_PEPPER}
+    max-failed-attempts: 5
+    lock-minutes: 15
+  limits:
+    max-transaction: "100000.00"

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Change PIN', 'Change your 4-digit PIN.', 'noindex,nofollow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap narrow">
+    <h1>Change PIN</h1>
+    <p>Your PIN is four digits. It cannot be all the same digit or a run such as 1234.</p>
+    <form class="form" th:action="@{/account/pin}" th:object="${form}" method="post" novalidate>
+      <div class="alert" role="alert" th:if="${#fields.hasErrors('*')}">
+        <p>Please correct the problems below.</p>
+        <p th:each="e : ${#fields.globalErrors()}" th:text="${e}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('currentPin')} ? 'has-error'">
+        <label for="currentPin">Current PIN</label>
+        <input type="password" id="currentPin" th:field="*{currentPin}" inputmode="numeric" maxlength="4" autocomplete="off">
+        <p class="error" th:if="${#fields.hasErrors('currentPin')}" th:errors="*{currentPin}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('newPin')} ? 'has-error'">
+        <label for="newPin">New PIN</label>
+        <input type="password" id="newPin" th:field="*{newPin}" inputmode="numeric" maxlength="4" autocomplete="off">
+        <p class="error" th:if="${#fields.hasErrors('newPin')}" th:errors="*{newPin}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('confirmPin')} ? 'has-error'">
+        <label for="confirmPin">New PIN again</label>
+        <input type="password" id="confirmPin" th:field="*{confirmPin}" inputmode="numeric" maxlength="4" autocomplete="off">
+        <p class="error" th:if="${#fields.hasErrors('confirmPin')}" th:errors="*{confirmPin}">Error</p>
+      </div>
+      <button class="btn" type="submit">Change PIN</button>
+    </form>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

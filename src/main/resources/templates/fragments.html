@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title, description, robots)">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${title} + ' | ' + ${site.brandName()}">Page | Bank</title>
+  <meta name="description" th:content="${description}" content="">
+  <meta name="robots" th:content="${robots}" content="index,follow">
+  <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/favicon-32.png}" href="/favicon-32.png">
+  <link rel="icon" sizes="any" th:href="@{/favicon.ico}" href="/favicon.ico">
+  <link rel="apple-touch-icon" th:href="@{/apple-touch-icon.png}" href="/apple-touch-icon.png">
+  <link rel="stylesheet" th:href="@{/css/site.css}" href="/css/site.css">
+</head>
+<body>
+<header class="site-header" th:fragment="header">
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="wrap bar">
+    <a class="brand" th:href="@{/}" href="/">
+      <img th:src="@{/favicon.svg}" src="/favicon.svg" alt="" width="28" height="28">
+      <span th:text="${site.brandName()}">Bank</span>
+    </a>
+    <nav aria-label="Main">
+      <ul th:if="${signedIn}">
+        <li><a th:href="@{/account}" href="/account">Account</a></li>
+        <li><a th:href="@{/account/deposit}" href="/account/deposit">Deposit</a></li>
+        <li><a th:href="@{/account/withdraw}" href="/account/withdraw">Withdraw</a></li>
+        <li><a th:href="@{/account/transfer}" href="/account/transfer">Transfer</a></li>
+        <li><a th:href="@{/account/statement}" href="/account/statement">Statement</a></li>
+        <li><a th:href="@{/account/pin}" href="/account/pin">Change PIN</a></li>
+        <li>
+          <form th:action="@{/logout}" action="/logout" method="post">
+            <button class="linklike" type="submit">Sign out</button>
+          </form>
+        </li>
+      </ul>
+      <ul th:unless="${signedIn}">
+        <li><a th:href="@{/apply}" href="/apply">Open an account</a></li>
+        <li><a th:href="@{/login}" href="/login">Sign in</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<footer class="site-footer" th:fragment="footer">
+  <div class="wrap">
+    <ul>
+      <li><a th:href="@{/privacy}" href="/privacy">Privacy policy</a></li>
+      <li><a th:href="@{/terms}" href="/terms">Terms and conditions</a></li>
+      <li><a th:href="'mailto:' + ${site.contactEmail()}" th:text="${site.contactEmail()}" href="#">contact</a></li>
+    </ul>
+    <p th:if="${site.demoMode()}">Demonstration application. No real money is held or moved.</p>
+    <p>&copy; <span th:text="${year}">2026</span> <span th:text="${site.operatorName()}">Operator</span></p>
+  </div>
+</footer>
+</body>
+</html>

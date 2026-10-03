@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Open an account', 'Apply for a savings or current account. One form, and your card number and PIN are issued immediately.', 'index,follow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap narrow">
+    <h1>Open an account</h1>
+    <p>All fields are required. Your account is created as soon as you submit the form.</p>
+    <p class="info" th:if="${site.demoMode()}">Demonstration project: please use test values. For example, PAN ABCDE1234F and Aadhaar 234567890123 are accepted.</p>
+    <form class="form" th:action="@{/apply}" th:object="${form}" method="post" novalidate>
+      <input type="hidden" th:field="*{token}">
+      <div class="alert" role="alert" th:if="${#fields.hasErrors('*')}">
+        <p>Please correct the problems below.</p>
+        <p th:each="e : ${#fields.globalErrors()}" th:text="${e}">Error</p>
+      </div>
+      <fieldset>
+        <legend>1. Personal details</legend>
+      <div class="field" th:classappend="${#fields.hasErrors('fullName')} ? 'has-error'">
+        <label for="fullName">Full name</label>
+        <input type="text" id="fullName" th:field="*{fullName}" autocomplete="name">
+        <p class="error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('fatherName')} ? 'has-error'">
+        <label for="fatherName">Father's name</label>
+        <input type="text" id="fatherName" th:field="*{fatherName}">
+        <p class="error" th:if="${#fields.hasErrors('fatherName')}" th:errors="*{fatherName}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('dateOfBirth')} ? 'has-error'">
+        <label for="dateOfBirth">Date of birth</label>
+        <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" autocomplete="bday">
+        <p class="hint">You must be at least 18 years old.</p>
+        <p class="error" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('gender')} ? 'has-error'">
+        <span class="label" id="gender-label">Gender</span>
+        <div class="choices" role="radiogroup" aria-labelledby="gender-label">
+          <label th:each="item : ${genders}"><input type="radio" th:field="*{gender}" th:value="${item.name()}"> <span th:text="${item.label()}">Option</span></label>
+        </div>
+        <p class="error" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('maritalStatus')} ? 'has-error'">
+        <span class="label" id="maritalStatus-label">Marital status</span>
+        <div class="choices" role="radiogroup" aria-labelledby="maritalStatus-label">
+          <label th:each="item : ${maritalStatuses}"><input type="radio" th:field="*{maritalStatus}" th:value="${item.name()}"> <span th:text="${item.label()}">Option</span></label>
+        </div>
+        <p class="error" th:if="${#fields.hasErrors('maritalStatus')}" th:errors="*{maritalStatus}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+        <label for="email">Email address</label>
+        <input type="email" id="email" th:field="*{email}" autocomplete="email">
+        <p class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('address')} ? 'has-error'">
+        <label for="address">Address</label>
+        <textarea id="address" th:field="*{address}" autocomplete="street-address"></textarea>
+        <p class="error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('city')} ? 'has-error'">
+        <label for="city">City</label>
+        <input type="text" id="city" th:field="*{city}" autocomplete="address-level2">
+        <p class="error" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('pinCode')} ? 'has-error'">
+        <label for="pinCode">PIN code</label>
+        <input type="text" id="pinCode" th:field="*{pinCode}" inputmode="numeric" maxlength="6" autocomplete="postal-code">
+        <p class="hint">The 6-digit postal code.</p>
+        <p class="error" th:if="${#fields.hasErrors('pinCode')}" th:errors="*{pinCode}">Error</p>
+      </div>
+      </fieldset>
+      <fieldset>
+        <legend>2. Additional details</legend>
+      <div class="field" th:classappend="${#fields.hasErrors('occupation')} ? 'has-error'">
+        <label for="occupation">Occupation</label>
+        <select id="occupation" th:field="*{occupation}">
+          <option value="">Select</option>
+          <option th:each="item : ${occupations}" th:value="${item.name()}" th:text="${item.label()}">Option</option>
+        </select>
+        <p class="error" th:if="${#fields.hasErrors('occupation')}" th:errors="*{occupation}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('incomeRange')} ? 'has-error'">
+        <label for="incomeRange">Annual income</label>
+        <select id="incomeRange" th:field="*{incomeRange}">
+          <option value="">Select</option>
+          <option th:each="item : ${incomeRanges}" th:value="${item.name()}" th:text="${item.label()}">Option</option>
+        </select>
+        <p class="error" th:if="${#fields.hasErrors('incomeRange')}" th:errors="*{incomeRange}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('pan')} ? 'has-error'">
+        <label for="pan">PAN</label>
+        <input type="text" id="pan" th:field="*{pan}" class="upper" maxlength="10" autocomplete="off" spellcheck="false">
+        <p class="hint">Ten characters, for example ABCDE1234F. Stored encrypted.</p>
+        <p class="error" th:if="${#fields.hasErrors('pan')}" th:errors="*{pan}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('aadhaar')} ? 'has-error'">
+        <label for="aadhaar">Aadhaar number</label>
+        <input type="text" id="aadhaar" th:field="*{aadhaar}" inputmode="numeric" maxlength="14" autocomplete="off">
+        <p class="hint">Twelve digits. Only the last four digits are stored.</p>
+        <p class="error" th:if="${#fields.hasErrors('aadhaar')}" th:errors="*{aadhaar}">Error</p>
+      </div>
+      </fieldset>
+      <fieldset>
+        <legend>3. Account</legend>
+      <div class="field" th:classappend="${#fields.hasErrors('accountType')} ? 'has-error'">
+        <span class="label" id="accountType-label">Account type</span>
+        <div class="choices" role="radiogroup" aria-labelledby="accountType-label">
+          <label th:each="item : ${accountTypes}"><input type="radio" th:field="*{accountType}" th:value="${item.name()}"> <span th:text="${item.label()}">Option</span></label>
+        </div>
+        <p class="error" th:if="${#fields.hasErrors('accountType')}" th:errors="*{accountType}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('declaration')} ? 'has-error'">
+        <div class="check">
+          <input type="checkbox" id="declaration" th:field="*{declaration}">
+          <label for="declaration">I confirm that the details above are correct, and I have read the <a th:href="@{/terms}" href="/terms">terms and conditions</a> and the <a th:href="@{/privacy}" href="/privacy">privacy policy</a>.</label>
+        </div>
+        <p class="error" th:if="${#fields.hasErrors('declaration')}" th:errors="*{declaration}">Error</p>
+      </div>
+      </fieldset>
+      <button class="btn" type="submit">Open account</button>
+    </form>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

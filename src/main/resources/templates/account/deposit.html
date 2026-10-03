@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Deposit', 'Add money to your account.', 'noindex,nofollow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap narrow">
+    <h1>Deposit</h1>
+    <p class="info" th:if="${site.demoMode()}">In this demonstration project a deposit simply credits your account. No real money is involved.</p>
+    <form class="form" th:action="@{/account/deposit}" th:object="${form}" method="post" novalidate>
+      <input type="hidden" th:field="*{requestId}">
+      <div class="alert" role="alert" th:if="${#fields.hasErrors('*')}">
+        <p>Please correct the problems below.</p>
+        <p th:each="e : ${#fields.globalErrors()}" th:text="${e}">Error</p>
+      </div>
+      <div class="field" th:classappend="${#fields.hasErrors('amount')} ? 'has-error'">
+        <label for="amount">Amount (INR)</label>
+        <input type="text" id="amount" th:field="*{amount}" inputmode="decimal" autocomplete="off">
+        <p class="hint">Up to <span th:text="${maxTransaction}">limit</span> per transaction.</p>
+        <p class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Error</p>
+      </div>
+      <button class="btn" type="submit">Deposit</button>
+    </form>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

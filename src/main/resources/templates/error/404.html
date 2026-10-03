@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Page not found', 'The page you asked for does not exist.', 'noindex,nofollow')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main">
+  <div class="wrap narrow">
+    <h1>Page not found</h1>
+    <p>There is no page at this address. It may have been moved, or the address may have a typing mistake.</p>
+    <p><a class="btn" th:href="@{/}" href="/">Go to the home page</a></p>
+  </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>
