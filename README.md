@@ -1,130 +1,355 @@
 # Bank Management System
 
-A server-rendered online banking application written in Java with Spring Boot. A customer applies for a savings or current account, receives a card number and PIN, and then signs in to deposit, withdraw, transfer to other accounts and read a statement.
+A full-stack web-based Bank Management System built with **Java, Spring Boot, Spring Security, Thymeleaf, MySQL, and Maven**.
 
-This is a portfolio project and a rebuild of an earlier Java Swing desktop prototype. **No real money is held or moved.** The privacy policy and terms pages say so, and a notice appears in the footer while `APP_DEMO_MODE` is `true` (the default).
+The project provides a secure banking workflow for customer account applications, authentication, PIN management, deposits, withdrawals, transfers, and transaction statements.
 
 ## Features
 
-- Account application with server-side validation (18+ age check, PAN and Aadhaar format checks)
-- Card number (16 digits, Luhn check digit) and 4-digit PIN issued once, at the end of the application
-- Sign in with card number and PIN, automatic lock after 5 wrong attempts for 15 minutes
-- Deposit, withdraw and transfer, with a per-transaction limit
-- PIN required again for withdrawals, transfers and PIN changes
-- Statement with running balance, paginated, printable from the browser
-- Change PIN
-- Privacy policy and terms pages, custom 403 and 404 pages, favicon
+- Customer account application
+- Automatic account and card number generation
+- Secure PIN-based authentication
+- Spring Security authentication and authorization
+- Failed-login protection with temporary account locking
+- Deposit and withdrawal operations
+- Account-to-account money transfer
+- Transaction statement with pagination
+- PIN change functionality
+- Transaction limits and validation
+- Encrypted sensitive account data
+- PIN hashing with an application-level pepper
+- Database versioning with Flyway
+- Global error pages for common HTTP errors
+- Privacy Policy and Terms & Conditions pages
+- Responsive web interface using Thymeleaf and CSS
+- Automated Maven build through GitHub Actions
+- Docker support for application and database setup
 
-## Stack
+## Technology Stack
 
-| Layer | Choice |
-| --- | --- |
+| Layer | Technology |
+|---|---|
 | Language | Java 21 |
-| Framework | Spring Boot 4.1 (Spring MVC, Spring Security, Spring Data JPA) |
-| Views | Thymeleaf, one hand-written CSS file, no JavaScript |
-| Database | MySQL 8.4, schema managed by Flyway |
-| Build | Maven |
+| Framework | Spring Boot |
+| Web | Spring MVC |
+| Template Engine | Thymeleaf |
+| Security | Spring Security |
+| ORM | Spring Data JPA / Hibernate |
+| Database | MySQL 8 |
+| Database Migration | Flyway |
+| Build Tool | Maven |
+| Containerization | Docker / Docker Compose |
+| CI | GitHub Actions |
+| Frontend | HTML, CSS, Thymeleaf |
+| JavaScript | Not required |
 
-There is no front-end framework and no JavaScript at all, which is why the content security policy can be `default-src 'none'` with only same-origin styles and images allowed.
+## Architecture
 
-## Run it locally
-
-You need JDK 21, Maven, and MySQL 8.4 (a `docker-compose.yml` is included for the database).
+The application follows a layered architecture:
 
 ```text
-1. Copy .env.example to .env.
-2. Set DB_PASSWORD, MYSQL_ROOT_PASSWORD, APP_DATA_KEY, APP_PIN_PEPPER,
-   APP_OPERATOR_NAME, APP_CONTACT_EMAIL and APP_JURISDICTION.
-3. Start MySQL with Docker: docker compose up -d db
-4. Export the same DB_* and APP_* values to your shell.
-5. Start the app: mvn spring-boot:run
+Browser
+   │
+   ▼
+Thymeleaf Views
+   │
+   ▼
+Controllers
+   │
+   ▼
+Services
+   │
+   ├── Business Logic
+   ├── Validation
+   ├── Security
+   └── Transaction Processing
+   │
+   ▼
+Repositories
+   │
+   ▼
+MySQL Database
 ```
 
-On Windows PowerShell, for example:
+### Main packages
 
-```powershell
-$env:DB_URL="jdbc:mysql://localhost:3306/bank?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
-$env:DB_USERNAME="bank"
-$env:DB_PASSWORD="your-db-password"
-$env:APP_DATA_KEY="your-base64-key"
-$env:APP_PIN_PEPPER="your-long-random-pepper"
-$env:APP_OPERATOR_NAME="Your Name"
-$env:APP_CONTACT_EMAIL="you@example.com"
-$env:APP_JURISDICTION="India"
-$env:APP_PUBLIC_URL="http://localhost:8080"
-$env:SPRING_PROFILES_ACTIVE="dev"
+```text
+dev.mayanktiwari.bank
+│
+├── config
+├── domain
+├── repository
+├── security
+├── service
+├── support
+├── validation
+└── web
+```
+
+## Security
+
+Security is an important part of the application rather than an afterthought.
+
+The project includes:
+
+- Spring Security authentication
+- PIN hashing
+- Application-level PIN pepper
+- Encryption for sensitive data
+- Failed-login tracking
+- Temporary account locking
+- Server-side validation
+- CSRF protection through Spring Security
+- Environment-based configuration for secrets
+- No application credentials committed to Git
+
+Sensitive configuration is supplied through environment variables rather than being hardcoded in the source code.
+
+## Database
+
+The application uses **MySQL 8** and **Flyway** for database schema management.
+
+The initial schema is located at:
+
+```text
+src/main/resources/db/migration/V1__initial_schema.sql
+```
+
+Flyway automatically applies database migrations when the application starts.
+
+## Requirements
+
+Before running the project locally, install:
+
+- Java 21 or compatible JDK
+- Maven
+- MySQL 8
+- Git
+
+Docker can also be used instead of installing MySQL manually.
+
+## Local Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/MayannkTiwari/BankManagment-System.git
+cd BankManagment-System
+```
+
+### 2. Create the database
+
+Open MySQL and create the application database:
+
+```sql
+CREATE DATABASE bank_management_system;
+```
+
+### 3. Configure environment variables
+
+Copy the example environment configuration:
+
+```text
+.env.example
+```
+
+Set the required environment variables for your local machine.
+
+Example:
+
+```text
+SPRING_PROFILES_ACTIVE=dev
+
+DB_URL=jdbc:mysql://localhost:3306/bank_management_system
+DB_USERNAME=your_database_user
+DB_PASSWORD=your_database_password
+
+APP_DATA_KEY=your_base64_encoded_32_byte_key
+APP_PIN_PEPPER=your_long_random_secret
+
+APP_OPERATOR_NAME=Your Name
+APP_CONTACT_EMAIL=your-email@example.com
+APP_JURISDICTION=India
+APP_PUBLIC_URL=http://localhost:8080
+```
+
+**Do not commit `.env` or real credentials to Git.**
+
+### 4. Build the project
+
+Using Maven:
+
+```bash
+mvn clean package
+```
+
+### 5. Run the application
+
+```bash
 mvn spring-boot:run
 ```
 
-Open http://localhost:8080. `SPRING_PROFILES_ACTIVE=dev` (set in `.env.example`) turns off the Secure flag on the session cookie, which is needed because localhost is served over plain http.
+The application will be available at:
 
-In demo mode the application form accepts test values, for example PAN `ABCDE1234F` and Aadhaar `234567890123`.
-
-Run the tests with `mvn test`. They need no database and no environment variables.
-
-## Configuration
-
-| Variable | Purpose |
-| --- | --- |
-| `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` | MySQL application connection |
-| `MYSQL_ROOT_PASSWORD` | MySQL root password used only by Docker Compose |
-| `APP_DATA_KEY` | 32 random bytes, base64. Encrypts the PAN |
-| `APP_PIN_PEPPER` | At least 32 characters. Mixed into PIN hashes |
-| `APP_OPERATOR_NAME`, `APP_CONTACT_EMAIL`, `APP_JURISDICTION` | Printed on the privacy policy and terms pages |
-| `APP_PUBLIC_URL` | Public address of the site |
-| `APP_BRAND_NAME` | Optional, defaults to "Bank Management System" |
-| `APP_DEMO_MODE` | Optional, defaults to `true` |
-
-None of the secrets have defaults, so the application refuses to start without them. Nothing sensitive is committed to the repository.
-
-## Design decisions
-
-**Money.** Amounts are `BigDecimal` stored as `decimal(19,2)`. Every operation that changes a balance locks the account row first (`SELECT ... FOR UPDATE`). Transfers lock both rows in ascending id order so two opposite transfers cannot deadlock. The ledger is insert-only and records the balance after each entry. The database also enforces `balance >= 0` and `amount > 0`.
-
-**Double submits.** Each deposit, withdrawal and transfer form carries a request id, and the ledger has a unique constraint on `(account_id, request_id)`. Submitting the same form twice applies it once. The application form uses a one-time session token for the same reason.
-
-**PINs.** A 4-digit PIN has only 10,000 values, so a plain bcrypt hash would not survive a database leak. The PIN is first run through HMAC-SHA256 with a pepper held in the environment, then hashed with bcrypt (cost 12). Wrong attempts are counted whether they happen at sign-in, at a withdrawal, at a transfer or at a PIN change. Failures are returned as results rather than thrown, so the counter is committed even though the operation is refused.
-
-**Personal data.** PAN is encrypted with AES-256-GCM. Only the last four digits of the Aadhaar number are kept, and the rest is discarded when the form is submitted. Religion and category from the original form are no longer collected.
-
-**Web security.** CSRF protection on every form, `HttpOnly` and `SameSite=Lax` session cookies, 15 minute idle timeout, no-store caching on authenticated pages, strict content security policy, generic sign-in error that does not reveal whether a card number exists or is locked.
-
-## Changes from the original Swing version
-
-- Rebuilt as a web application. The original login screen had empty button handlers.
-- SQL built by string concatenation and a hardcoded MySQL root password are gone. Everything uses JPA with bound parameters, and credentials come from the environment.
-- PINs were stored in plain text. They are now peppered hashes.
-- Fixed Deposit and Recurring Deposit accounts were removed because there is no interest or maturity logic behind them. Savings and current accounts are fully working.
-- The "services required" checkboxes (cheque book, mobile banking, email alerts and so on) were removed because none of them did anything.
-- Senior citizen and existing account questions were removed. Age is derived from the date of birth.
-
-## Project layout
-
-```
-src/main/java/dev/mayanktiwari/bank
-  config/       properties, security filter chain, crypto beans, launch checks
-  domain/       entities and enums
-  repository/   Spring Data repositories
-  security/     sign-in classes and the PIN encoder
-  service/      banking rules, PIN rules, application, read-side queries
-  support/      card numbers, PINs, encryption, formatting
-  validation/   minimum-age constraint
-  web/          controllers and form objects
-src/main/resources
-  db/migration/ Flyway schema
-  templates/    Thymeleaf pages
-  static/       stylesheet and favicons
-src/test        unit tests for the rules above
+```text
+http://localhost:8080
 ```
 
-## Known limitations
+## Docker
 
-- One account per applicant through the UI, even though the schema allows more.
-- No password reset: a forgotten PIN cannot be recovered, because there is no email or SMS integration.
-- No admin area, interest calculation, or scheduled jobs.
-- Deposits simply credit the account. A real system would receive funds from a payment rail.
-- The legal pages are plain-language drafts for a demonstration project. If you ever operate this for real users, have a lawyer review them and check what licences apply to holding customer money.
+The project also contains Docker configuration.
 
-## Deploying it (optional)
+Build and start the application with:
 
-With `SPRING_PROFILES_ACTIVE=prod` the application checks at startup that `APP_PUBLIC_URL` is an `https://` address on your own domain, not a shared hosting address such as `*.onrender.com`, and that the contact email looks real. If not, it exits with an explanation. A `Dockerfile` is included.
+```bash
+docker compose up --build
+```
+
+To stop the containers:
+
+```bash
+docker compose down
+```
+
+Environment variables should still be configured according to the project's environment configuration.
+
+## Testing
+
+The project includes unit tests covering areas such as:
+
+- Banking operations
+- PIN handling
+- Card number generation
+- Data encryption
+- Formatting utilities
+- Age validation
+- Application services
+- Application startup checks
+
+Run the test suite with:
+
+```bash
+mvn test
+```
+
+## CI
+
+GitHub Actions is configured to automatically build the project.
+
+Workflow:
+
+```text
+.github/workflows/build.yml
+```
+
+The CI pipeline verifies that the project can be built successfully using Maven.
+
+## Project Structure
+
+```text
+BankManagment-System/
+│
+├── .github/
+│   └── workflows/
+│       └── build.yml
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── dev/mayanktiwari/bank/
+│   │   │
+│   │   └── resources/
+│   │       ├── db/migration/
+│   │       ├── static/
+│   │       └── templates/
+│   │
+│   └── test/
+│       └── java/
+│
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── docker-compose.yml
+├── pom.xml
+└── README.md
+```
+
+## Application Modules
+
+### Account Application
+
+Customers can submit an application to open a bank account.
+
+The application performs server-side validation before creating the account.
+
+### Authentication
+
+Customers authenticate using their account credentials and PIN.
+
+The application also tracks failed authentication attempts and can temporarily lock accounts after repeated failures.
+
+### Banking Operations
+
+Authenticated users can perform:
+
+- Deposits
+- Withdrawals
+- Transfers
+- PIN changes
+
+Each operation is validated before being persisted.
+
+### Transaction Statement
+
+Customers can view their transaction history through the statement section.
+
+Transactions are stored as ledger entries and displayed through a paginated interface.
+
+## Design Goals
+
+The project was developed with the following goals:
+
+1. Keep the application simple enough to understand and maintain.
+2. Separate web, business, security, and persistence responsibilities.
+3. Keep sensitive configuration outside the source code.
+4. Use database migrations instead of relying on automatic schema generation.
+5. Validate financial operations on the server.
+6. Maintain a clean Git history and reproducible build process.
+7. Keep the application deployable through both Maven and Docker.
+
+## Current Status
+
+**Development Status: Functional local build**
+
+The application has been configured and tested for local execution using:
+
+- Spring Boot
+- Java
+- MySQL
+- Maven
+- Flyway
+
+The project is currently intended for **educational and portfolio purposes** and should not be considered production banking software.
+
+## Disclaimer
+
+This project is an educational implementation of a banking system.
+
+It is not intended to process real financial transactions or store real banking/customer information.
+
+Do not use real passwords, PINs, banking credentials, or sensitive personal information when testing the application.
+
+## Author
+
+**Mayank Tiwari**
+
+B.Tech - Computer Science and Engineering (Artificial Intelligence)
+
+Galgotias College of Engineering & Technology
+
+GitHub:  
+https://github.com/MayannkTiwari
+
+## License
+
+This project is intended for educational and portfolio purposes.
